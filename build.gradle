@@ -8,6 +8,17 @@ group = 'inbox'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+// jar 파일 생성
+jar {
+    manifest {
+        attributes "Main-Class": "com.gradle.tutorial.FizzBuzzProcessor"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -20,6 +31,7 @@ dependencies {
     implementation('redis.clients:jedis:4.2.3')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
 
 tasks.named('test') {
     exclude '**/*'
