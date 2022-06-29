@@ -9,18 +9,12 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 // Zoe, .jar 생성
-jar {
+bootJar{
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    manifest {
-        attributes "Main-Class": "com.gradle.tutorial.FizzBuzzProcessor"
-    }
-
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    archivesBaseName = 'app'
+    archiveFileName = 'app.jar'
+    archiveVersion = "0.0.0"
 }
-
 repositories {
     mavenCentral()
 }
