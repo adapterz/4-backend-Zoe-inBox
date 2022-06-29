@@ -1,6 +1,6 @@
-FROM openjdk:17-jdk-slim-buster
+FROM adoptopenjdk/openjdk11:ubi
 VOLUME /backend_container_data
-ARG JAR_FILE=/backend_build/
-COPY ${JAR_FILE} app.jar
+RUN mkdir /server/
+COPY app.jar /server/
 EXPOSE 80
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/server/app.jar"]
