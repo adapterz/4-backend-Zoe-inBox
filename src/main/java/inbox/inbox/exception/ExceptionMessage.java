@@ -12,8 +12,5 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExceptionMessage {
-
-    @JsonIgnore
-    private Timestamp timestamp;
     private String message;
 }

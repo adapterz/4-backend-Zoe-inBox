@@ -4,6 +4,7 @@ import inbox.inbox.config.ApplicationContextConfig;
 import inbox.inbox.exception.PortfolioConflictException;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.middlewares.CookieManager;
+import javax.validation.constraints.NotNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.ResponseEntity;
