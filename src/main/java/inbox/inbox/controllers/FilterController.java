@@ -2,7 +2,7 @@ package inbox.inbox.controllers;
 
 import inbox.inbox.config.ApplicationContextConfig;
 import inbox.inbox.exception.ValuesAllowed;
-import inbox.inbox.middlewares.CookieManager;
+import inbox.inbox.utils.CookieManager;
 import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

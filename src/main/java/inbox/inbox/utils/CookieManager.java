@@ -1,4 +1,4 @@
-package inbox.inbox.middlewares;
+package inbox.inbox.utils;
 
 import org.springframework.stereotype.Component;
 
