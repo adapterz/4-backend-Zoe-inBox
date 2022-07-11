@@ -1,7 +1,6 @@
-package inbox.inbox.controllers;
+package inbox.inbox.portfolio;
 
 import inbox.inbox.config.ApplicationContextConfig;
-import inbox.inbox.exception.PortfolioConflictException;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
 import org.springframework.context.ApplicationContext;

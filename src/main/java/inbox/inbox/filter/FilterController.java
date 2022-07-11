@@ -1,4 +1,4 @@
-package inbox.inbox.controllers;
+package inbox.inbox.filter;
 
 import inbox.inbox.config.ApplicationContextConfig;
 import inbox.inbox.exception.ValuesAllowed;

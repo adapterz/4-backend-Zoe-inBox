@@ -1,5 +1,6 @@
 package inbox.inbox.exception;
 
+import inbox.inbox.portfolio.PortfolioConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
