@@ -1,5 +1,7 @@
 package inbox.inbox.exception;
 
+import static inbox.inbox.config.ConstantList.INVALID_REQUEST;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.ElementType;
@@ -13,7 +15,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {ValuesAllowedValidator.class})
 public @interface ValuesAllowed {
 
-    String message() default "invalid_request";
+    String message() default INVALID_REQUEST;
 
     Class<?>[] groups() default {};
 
