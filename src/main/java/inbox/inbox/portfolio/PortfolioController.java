@@ -6,7 +6,6 @@ import static inbox.inbox.config.ConstantList.FE;
 import static inbox.inbox.config.ConstantList.PORTFOLIO_PATH;
 
 import inbox.inbox.config.ApplicationContextConfig;
-import inbox.inbox.config.ConstantList;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
 import org.springframework.context.ApplicationContext;
@@ -70,7 +69,7 @@ public class PortfolioController {
         }
         // 포트폴리오 다른 range 조회 옵션이 off 일 때 해당 range 조회 옵션 off 로 못함(range 가 2갠데 둘다 off 할 수 없음)
         else if (isOtherOff) {
-            throw new PortfolioConflictException();
+            throw new PortfolioRangeConflictException();
         }
         // 기존 영상 조회 옵션을 on 해놨을 때 off 로 전환 - 쿠키 생성
         else {

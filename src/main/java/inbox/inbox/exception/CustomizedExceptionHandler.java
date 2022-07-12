@@ -4,7 +4,7 @@ import static inbox.inbox.config.ConstantList.AT_LEAST_ONE_SHOULD_BE_ON;
 import static inbox.inbox.config.ConstantList.INVALID_REQUEST;
 import static inbox.inbox.config.ConstantList.UNEXPECTED_ERROR;
 
-import inbox.inbox.portfolio.PortfolioConflictException;
+import inbox.inbox.portfolio.PortfolioRangeConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +32,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // 포트폴리오 range 의 조회 조건을 모두 off 했을 때
-    @ExceptionHandler(PortfolioConflictException.class)
+    @ExceptionHandler(PortfolioRangeConflictException.class)
     public ResponseEntity<Object> handlePortfolioConflictException() {
         ExceptionMessage exceptionMessage = new ExceptionMessage(AT_LEAST_ONE_SHOULD_BE_ON);
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.CONFLICT);
