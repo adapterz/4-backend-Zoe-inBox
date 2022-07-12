@@ -1,8 +1,13 @@
-package inbox.inbox.controllers;
+package inbox.inbox.filter;
+
+import static inbox.inbox.config.ConstantList.FILTER;
+import static inbox.inbox.config.ConstantList.FILTER_PATH;
+import static inbox.inbox.config.ConstantList.OFF;
+import static inbox.inbox.config.ConstantList.ON;
 
 import inbox.inbox.config.ApplicationContextConfig;
 import inbox.inbox.exception.ValuesAllowed;
-import inbox.inbox.middlewares.CookieManager;
+import inbox.inbox.utils.CookieManager;
 import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FilterController {
 
-    @GetMapping("/filters/{switch}")
-    public ResponseEntity<Object> switchFilterOption(@PathVariable("switch") @ValuesAllowed(values = {"on", "off"}) String option,
+    @GetMapping(FILTER_PATH + "/{switch}")
+    public ResponseEntity<Object> switchFilterOption(
+        @PathVariable("switch") @ValuesAllowed(values = {ON, OFF}) String option,
         HttpServletRequest request, HttpServletResponse response) {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
             ApplicationContextConfig.class);
@@ -32,18 +38,18 @@ public class FilterController {
             for (Cookie tempCookie : cookies) {
                 String tempCookieName = tempCookie.getName().toString();
                 String tempCookieValue = tempCookie.getValue().toString();
-                if (Objects.equals(tempCookieName, "filter") && Objects.equals(tempCookieValue,
-                    "off")) {
+                if (Objects.equals(tempCookieName, FILTER) && Objects.equals(tempCookieValue,
+                    OFF)) {
                     isOff = true;
                     break;
                 }
             }
         }
-        if (isOff&&Objects.equals(option,"on")) {
-            response.addCookie(cookieManager.deleteCookie("filter"));
+        if (isOff && Objects.equals(option, ON)) {
+            response.addCookie(cookieManager.deleteCookie(FILTER));
         }
-        if (!isOff&&Objects.equals(option,"off")) {
-            response.addCookie(cookieManager.makeCookie("filter", "off", 24 * 60 * 60));
+        if (!isOff && Objects.equals(option, OFF)) {
+            response.addCookie(cookieManager.makeCookie(FILTER, OFF, 24 * 60 * 60));
         }
 
         return ResponseEntity.ok().build();

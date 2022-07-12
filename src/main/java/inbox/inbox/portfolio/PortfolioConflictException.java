@@ -1,4 +1,4 @@
-package inbox.inbox.exception;
+package inbox.inbox.portfolio;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
