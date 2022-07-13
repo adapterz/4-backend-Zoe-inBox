@@ -1,10 +1,8 @@
 package inbox.inbox.exception;
 
-import static inbox.inbox.config.ConstantList.AT_LEAST_ONE_SHOULD_BE_ON;
-import static inbox.inbox.config.ConstantList.INVALID_REQUEST;
-import static inbox.inbox.config.ConstantList.UNEXPECTED_ERROR;
-
+import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.portfolio.PortfolioRangeConflictException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolationException;
 
 // 예외 핸들링
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 

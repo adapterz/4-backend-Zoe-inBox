@@ -8,8 +8,8 @@ import static inbox.inbox.utils.ConstantManager.PORTFOLIO_PATH;
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import java.security.NoSuchAlgorithmException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 // 포트폴리오 컨트롤러
+@RequiredArgsConstructor
 @Validated
 @RequestMapping(PORTFOLIO_PATH)
 @RestController
@@ -32,14 +33,11 @@ public class PortfolioController {
     private final CookieManager cookieManager;
 
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
-    @GetMapping(PORTFOLIO_PATH + "/range/{option}")
+    @GetMapping("/range/{option}")
     public ResponseEntity<Object> switchRange(
         @PathVariable("option") @ValuesAllowed(values = {FE, BE}) String option,
         HttpServletResponse response, HttpServletRequest request) {
-        // 쿠키 관리해줄 CookieManager bean 객체 위치 가져오고 필요한 변수 정의
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-            ApplicationContextConfig.class);
-        CookieManager cookieManager = applicationContext.getBean(CookieManager.class);
+        // 필요한 변수 정의
         Cookie[] cookies = cookieManager.getAllRequestCookie(request);
         boolean isOtherOff = false;
         String cookieValue = null;
@@ -81,18 +79,20 @@ public class PortfolioController {
         else {
             response.addCookie(cookieManager.makeCookie(option, OFF, 24 * 60 * 60));
         }
-
         return ResponseEntity.ok().build();
     }
 
     // 영상 업로드 전 인증 메일 발송
     @PostMapping("/email")
-    public String confirmEmail(@RequestBody PortfolioEmailConfirmDto portfolioEmailConfirmDto) {
-        Boolean isSucceed = service.SendConfirmCodeForEmailAuthentication(portfolioEmailConfirmDto);
-        if (isSucceed) {
-            return portfolioEmailConfirmDto.getEmail();
-        } else {
-            throw new RuntimeException();
-        }
+    public PortfolioResponseMessage confirmEmail(
+        @RequestBody PortfolioEmailConfirmDto portfolioEmailConfirmDto,
+        HttpServletRequest request) throws NoSuchAlgorithmException {
+        // 인증 메일 보내기
+        service.sendConfirmCodeForEmailAuthentication(
+            portfolioEmailConfirmDto);
+        // db에 (인증번호, 유저 ip, User-Agent, email) 저장
+        long confirmIdx = service.addPortfolioEmailConfirm(portfolioEmailConfirmDto, request);
+        return PortfolioResponseMessage.builder().message(constant.SEND_MAIL).confirmIdx(confirmIdx)
+            .build();
     }
 }
