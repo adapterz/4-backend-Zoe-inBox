@@ -30,13 +30,12 @@ public class PortfolioEmailConfirm {
     private String user_agent_digest;
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp created_at;
-
     @Builder
-    public PortfolioEmailConfirm(Integer confirm_code, String email, String ip,
-        String user_agent_digest) {
-        this.confirm_code = confirm_code;
+    public PortfolioEmailConfirm(Integer confirmCode, String email, String ip,
+        String userAgentDigest) {
+        this.confirm_code = confirmCode;
         this.email = email;
         this.ip = ip;
-        this.user_agent_digest = user_agent_digest;
+        this.user_agent_digest = userAgentDigest;
     }
 }
