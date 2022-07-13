@@ -78,4 +78,15 @@ public class PortfolioController {
 
         return ResponseEntity.ok().build();
     }
+
+    // 영상 업로드 전 인증 메일 발송
+    @PostMapping("/email")
+    public String confirmEmail(@RequestBody PortfolioEmailConfirmDto portfolioEmailConfirmDto) {
+        Boolean isSucceed = service.SendConfirmCodeForEmailAuthentication(portfolioEmailConfirmDto);
+        if (isSucceed) {
+            return portfolioEmailConfirmDto.getEmail();
+        } else {
+            throw new RuntimeException();
+        }
+    }
 }
