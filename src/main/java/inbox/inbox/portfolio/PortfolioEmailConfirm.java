@@ -11,11 +11,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// Confirm 테이블
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "confirm")
 public class PortfolioEmailConfirm {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long confirm_idx;

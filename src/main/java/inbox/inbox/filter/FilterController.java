@@ -1,9 +1,8 @@
 package inbox.inbox.filter;
 
-import static inbox.inbox.config.ConstantList.FILTER;
-import static inbox.inbox.config.ConstantList.FILTER_PATH;
-import static inbox.inbox.config.ConstantList.OFF;
-import static inbox.inbox.config.ConstantList.ON;
+import static inbox.inbox.utils.ConstantManager.FILTER_PATH;
+import static inbox.inbox.utils.ConstantManager.OFF;
+import static inbox.inbox.utils.ConstantManager.ON;
 
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;

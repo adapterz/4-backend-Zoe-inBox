@@ -1,4 +1,5 @@
 package inbox.inbox.portfolio;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

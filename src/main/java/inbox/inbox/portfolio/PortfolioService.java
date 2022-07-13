@@ -1,12 +1,15 @@
 package inbox.inbox.portfolio;
 
+import inbox.inbox.utils.UserInfoManager;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+// 포트폴리오 서비스
 @RequiredArgsConstructor
 @Service
 public class PortfolioService {
