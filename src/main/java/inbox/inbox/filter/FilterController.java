@@ -21,10 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
+@RequestMapping(FILTER_PATH)
 @RestController
 public class FilterController {
 
-    @GetMapping(FILTER_PATH + "/{switch}")
+    private final ConstantManager constant;
+    private final CookieManager cookieManager;
+
+    // 필터 on/off
+    @GetMapping("/{switch}")
     public ResponseEntity<Object> switchFilterOption(
         @PathVariable("switch") @ValuesAllowed(values = {ON, OFF}) String option,
         HttpServletRequest request, HttpServletResponse response) {
@@ -38,7 +43,8 @@ public class FilterController {
             for (Cookie tempCookie : cookies) {
                 String tempCookieName = tempCookie.getName().toString();
                 String tempCookieValue = tempCookie.getValue().toString();
-                if (Objects.equals(tempCookieName, FILTER) && Objects.equals(tempCookieValue,
+                if (Objects.equals(tempCookieName, constant.FILTER) && Objects.equals(
+                    tempCookieValue,
                     OFF)) {
                     isOff = true;
                     break;
@@ -46,10 +52,11 @@ public class FilterController {
             }
         }
         if (isOff && Objects.equals(option, ON)) {
-            response.addCookie(cookieManager.deleteCookie(FILTER));
+            response.addCookie(cookieManager.deleteCookie(constant.FILTER));
         }
         if (!isOff && Objects.equals(option, OFF)) {
-            response.addCookie(cookieManager.makeCookie(FILTER, OFF, 24 * 60 * 60));
+            response.addCookie(
+                cookieManager.makeCookie(constant.FILTER, OFF, 24 * 60 * 60));
         }
 
         return ResponseEntity.ok().build();

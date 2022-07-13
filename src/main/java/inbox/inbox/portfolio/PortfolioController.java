@@ -1,11 +1,11 @@
 package inbox.inbox.portfolio;
 
-import static inbox.inbox.config.ConstantList.OFF;
-import static inbox.inbox.config.ConstantList.BE;
-import static inbox.inbox.config.ConstantList.FE;
-import static inbox.inbox.config.ConstantList.PORTFOLIO_PATH;
+import static inbox.inbox.utils.ConstantManager.BE;
+import static inbox.inbox.utils.ConstantManager.FE;
+import static inbox.inbox.utils.ConstantManager.OFF;
+import static inbox.inbox.utils.ConstantManager.PORTFOLIO_PATH;
 
-import inbox.inbox.config.ApplicationContextConfig;
+import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
 import org.springframework.context.ApplicationContext;
@@ -23,9 +23,13 @@ import java.util.Objects;
 
 // 포트폴리오 컨트롤러
 @Validated
+@RequestMapping(PORTFOLIO_PATH)
 @RestController
 public class PortfolioController {
 
+    private final PortfolioService service;
+    private final ConstantManager constant;
+    private final CookieManager cookieManager;
 
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
     @GetMapping(PORTFOLIO_PATH + "/range/{option}")
@@ -49,8 +53,10 @@ public class PortfolioController {
             for (Cookie tempCookie : cookies) {
                 String tempCookieName = tempCookie.getName().toString();
                 // 목적 2
-                if ((Objects.equals(option, BE) && Objects.equals(tempCookieName, FE)) || (
-                    Objects.equals(option, FE) && Objects.equals(tempCookieName, BE))) {
+                if ((Objects.equals(option, BE) && Objects.equals(tempCookieName,
+                    FE)) || (
+                    Objects.equals(option, FE) && Objects.equals(tempCookieName,
+                        BE))) {
                     String otherOptionSwitch = tempCookie.getValue().toString();
                     if (Objects.equals(otherOptionSwitch, OFF)) {
                         isOtherOff = true;
