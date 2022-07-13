@@ -48,9 +48,18 @@ public class PortfolioService {
         String userAgentDigest = userInfoManager.getUserAgentDigest(request);
         portfolioEmailConfirmDto.setUserAgentDigest(userAgentDigest);
 
-        // 2. 요청한 유저의 user-agent 와 ip 정보 얻기
+        // 유저의 ip 정보 가져오기
+        String ip = userInfoManager.getIp(request);
+        portfolioEmailConfirmDto.setIp(ip);
 
-        return true;
+        // db에 저장 및 idx return
+        return portfolioEmailConfirmRepository.save(
+                PortfolioEmailConfirm.builder()
+                    .email(portfolioEmailConfirmDto.getEmail())
+                    .ip(portfolioEmailConfirmDto.getIp())
+                    .confirm_code(
+                        portfolioEmailConfirmDto.getConfirmCode())
+                    .user_agent_digest(portfolioEmailConfirmDto.getUserAgentDigest()).build())
+            .getConfirm_idx();
     }
-
 }
