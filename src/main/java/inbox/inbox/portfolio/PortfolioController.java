@@ -43,6 +43,32 @@ public class PortfolioController {
     private final ConstantManager constant;
     private final CookieManager cookieManager;
 
+    // 포트폴리오 정보 업로드
+    @Validated(PortfolioValidationGroup.class)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public @ResponseBody ResponseEntity<Object> uploadPortfolio(
+        @ModelAttribute("PortfolioDto") @Valid PortfolioDto portfolioDto,
+        BindingResult bindingResult,
+        HttpServletRequest request) throws NoSuchAlgorithmException {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        // 요청한 유저정보 일치여부 확인 및 인증번호 확인
+
+        PortfolioConfirmDto portfolioConfirmDto = PortfolioConfirmDto.builder().confirmIdx(
+            portfolioDto.getConfirmIdx()).confirmCode(portfolioDto.getConfirmCode()).email(
+            portfolioDto.getEmail()).build();
+
+        service.confirmForAuthentication(
+            portfolioConfirmDto, request);
+
+        // 포트폴리오 정보 db에 저장
+        service.addPortfolio(portfolioDto);
+
+        return ResponseEntity.created(URI.create(PORTFOLIO_PATH)).build();
+
+    }
+
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
     @GetMapping("/range/{option}")
     public ResponseEntity<Object> switchRange(
@@ -95,7 +121,7 @@ public class PortfolioController {
     }
 
     // 영상 업로드 전 인증 메일 발송
-    @Validated(ValidationGroup.PortfolioConfirmEmailValidationGroup.class)
+    @Validated(PortfolioConfirmValidationGroup.class)
     @PostMapping("/email")
     public PortfolioResponseMessage confirmEmail(
         @RequestBody @Valid PortfolioConfirmDto portfolioConfirmDto,
