@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 // 유저에게 응답해줄 응답 메세지 객체
 @Getter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(Include.NON_DEFAULT)
 public class PortfolioResponseMessage {
 
     private String message;
@@ -18,15 +18,14 @@ public class PortfolioResponseMessage {
     private String title;
     private String fileName;
     private String extension;
-    private String portfolioDate;
+    private Date portfolioDate;
     private String about;
     private String email;
-    private String createdDate;
     private long confirmIdx;
 
     @Builder
     PortfolioResponseMessage(String message, String range, String title, String fileName,
-        String extension, String portfolioDate, String about, String email, String createdDate,
+        String extension, Date portfolioDate, String about, String email,
         long confirmIdx) {
         this.message = message;
         this.range = range;
@@ -36,7 +35,6 @@ public class PortfolioResponseMessage {
         this.portfolioDate = portfolioDate;
         this.about = about;
         this.email = email;
-        this.createdDate = createdDate;
         this.confirmIdx = confirmIdx;
     }
 
