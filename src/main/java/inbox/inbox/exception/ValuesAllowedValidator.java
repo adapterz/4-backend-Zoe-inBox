@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
-// 유효성 검사 validator
+// 특정 값 유효성 검사 validator
 public class ValuesAllowedValidator implements ConstraintValidator<ValuesAllowed, String> {
 
     private List<String> expectedValues;
