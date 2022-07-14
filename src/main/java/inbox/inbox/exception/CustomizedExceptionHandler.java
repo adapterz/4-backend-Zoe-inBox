@@ -31,9 +31,11 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 유효하지 않음
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleConstraintViolationException() {
+    public ResponseEntity<Object> handleConstraintViolationException(Exception exception) {
+        String exceptionString = exception.getMessage();
+        String[] exceptionArray = exceptionString.split(":|,");
         ExceptionMessage exceptionMessage = ExceptionMessage.builder()
-            .message(constant.INVALID_REQUEST).build();
+            .message(constant.INVALID_REQUEST).error(exceptionArray[1].substring(1)).build();
         return new ResponseEntity(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
 
@@ -58,6 +60,6 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handlePortfolioConfirmUnauthorizedException() {
         ExceptionMessage exceptionMessage = ExceptionMessage.builder()
             .message(constant.AUTH_FAIL).build();
-        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.UNAUTHORIZED);
     }
 }
