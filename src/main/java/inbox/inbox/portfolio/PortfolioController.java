@@ -5,10 +5,13 @@ import static inbox.inbox.utils.ConstantManager.FE;
 import static inbox.inbox.utils.ConstantManager.OFF;
 import static inbox.inbox.utils.ConstantManager.PORTFOLIO_PATH;
 
+import inbox.inbox.exception.ValidationGroup;
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
 import java.security.NoSuchAlgorithmException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 // 포트폴리오 컨트롤러
-@RequiredArgsConstructor
 @Validated
+@RequiredArgsConstructor
 @RequestMapping(PORTFOLIO_PATH)
 @RestController
 public class PortfolioController {
@@ -86,15 +89,17 @@ public class PortfolioController {
     }
 
     // 영상 업로드 전 인증 메일 발송
+    @Validated(ValidationGroup.PortfolioConfirmEmailValidationGroup.class)
     @PostMapping("/email")
     public PortfolioResponseMessage confirmEmail(
-        @RequestBody PortfolioEmailConfirmDto portfolioEmailConfirmDto,
+        @RequestBody @Valid PortfolioConfirmDto portfolioConfirmDto,
         HttpServletRequest request) throws NoSuchAlgorithmException {
         // 인증 메일 보내기
+
         service.sendConfirmCodeForEmailAuthentication(
-            portfolioEmailConfirmDto);
+            portfolioConfirmDto);
         // db에 (인증번호, 유저 ip, User-Agent, email) 저장
-        long confirmIdx = service.addPortfolioEmailConfirm(portfolioEmailConfirmDto, request);
+        long confirmIdx = service.addPortfolioEmailConfirm(portfolioConfirmDto, request);
         return PortfolioResponseMessage.builder().message(constant.SEND_MAIL).confirmIdx(confirmIdx)
             .build();
     }
