@@ -24,6 +24,8 @@ public class PortfolioService {
 
     private final JavaMailSender javaMailSender;
     private final PortfolioConfirmRepository portfolioConfirmRepository;
+    private final PortfolioRepository portfolioRepository;
+    private final PortfolioFileRepository portfolioFileRepository;
     private final UserInfoManager userInfoManager;
 
     // 인증 메일 보내기
@@ -117,5 +119,33 @@ public class PortfolioService {
             throw new PortfolioConfirmUnauthorizedException();
         }
 
+    }
+
+    // 포트폴리오 정보 추가
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    public void addPortfolio(PortfolioDto portfolioDto) {
+        Byte rangeMappingValue = 0;
+        // file table 에 저장해줄 객체 생성 및 의존성 주입
+        // filePath 를 fileName, extension 으로 쪼개서 file 테이블에 매핑해줄 객체에 값 넣어주기
+        String[] fileInfo = portfolioDto.getFilePath().split("\\.");
+        PortfolioFile portfolioFile = PortfolioFile.builder().fileName(fileInfo[0])
+            .extension(fileInfo[1]).build();
+        portfolioFile.setFile_idx(portfolioFileRepository.save(portfolioFile).getFile_idx());
+
+        // range String -> byte 로 매핑
+        if (Objects.equals(portfolioDto.getRange(), BE)) {
+            rangeMappingValue = 0;
+        } else if (Objects.equals(portfolioDto.getRange(), FE)) {
+            rangeMappingValue = 1;
+        }
+
+        // portfolio table 에 저장해줄 객체 생성 및 의존성 주입
+        Portfolio portfolio = Portfolio.builder().range(rangeMappingValue)
+            .title(portfolioDto.getTitle()).about(
+                portfolioDto.getAbout()).portfolioDate(portfolioDto.getDate())
+            .email(portfolioDto.getEmail()).build();
+        portfolio.setFile(portfolioFile);
+
+        portfolioRepository.save(portfolio);
     }
 }
