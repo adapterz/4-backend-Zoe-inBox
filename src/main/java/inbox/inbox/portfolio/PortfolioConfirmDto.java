@@ -15,12 +15,12 @@ public class PortfolioConfirmDto {
 
     private long confirmIdx;
     private int confirmCode;
-    @NotBlank(groups = {ValidationGroup.PortfolioConfirmCodeValidationGroup.class,
-        ValidationGroup.PortfolioConfirmEmailValidationGroup.class})
-    @Email(groups = {ValidationGroup.PortfolioConfirmCodeValidationGroup.class,
-        ValidationGroup.PortfolioConfirmEmailValidationGroup.class})
-    @Size(max = 100, groups = {ValidationGroup.PortfolioConfirmCodeValidationGroup.class,
-        ValidationGroup.PortfolioConfirmEmailValidationGroup.class})
+    @NotBlank(groups = {
+        PortfolioConfirmValidationGroup.class}, message = "email")
+    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%& '*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
+        , groups = {
+        PortfolioConfirmValidationGroup.class}, message = "email")
+    @Size(max = 100, groups = {PortfolioConfirmValidationGroup.class}, message = "email")
     private String email;
     private String ip;
     private String userAgentDigest;

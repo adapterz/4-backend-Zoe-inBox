@@ -109,20 +109,4 @@ public class PortfolioController {
         return PortfolioResponseMessage.builder().message(constant.SEND_MAIL).confirmIdx(confirmIdx)
             .build();
     }
-
-    // 유저가 입력한 인증번호 확인 API
-    @Validated(ValidationGroup.PortfolioConfirmCodeValidationGroup.class)
-    @PostMapping("/code")
-    public PortfolioResponseMessage confirmCode(
-        @RequestBody @Valid PortfolioConfirmDto portfolioConfirmDto,
-        HttpServletRequest request) throws NoSuchAlgorithmException {
-        // 요청한 유저정보 일치여부 확인 및 인증번호 확인
-        service.confirmForAuthentication(
-            portfolioConfirmDto, request);
-
-        return PortfolioResponseMessage.builder().message(constant.AUTHORIZED)
-            .email(portfolioConfirmDto.getEmail()).build();
-    }
-
-
 }
