@@ -42,4 +42,18 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.CONFLICT);
     }
 
+    // confirm 테이블에 일치하는 idx 정보가 없을 때
+    @ExceptionHandler(PortfolioConfirmNotFoundException.class)
+    public ResponseEntity<Object> handlePortfolioConfirmNotFoundException() {
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.NOT_FOUND).build();
+        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.NOT_FOUND);
+    }
+    // confirm 테이블의 정보와 인증 요청한 유저의 정보 or 인증번호가 일치하지 않을 때
+    @ExceptionHandler(PortfolioConfirmUnauthorizedException.class)
+    public ResponseEntity<Object> handlePortfolioConfirmUnauthorizedException() {
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.AUTH_FAIL).build();
+        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.NOT_FOUND);
+    }
 }

@@ -62,4 +62,52 @@ public class PortfolioService {
                     .userAgentDigest(portfolioConfirmDto.getUserAgentDigest()).build())
             .getConfirm_idx();
     }
+
+    // 인증번호 확인 및 유저 정보 일치 여부 확인
+    public void confirmForAuthentication(PortfolioConfirmDto portfolioConfirmDto,
+        HttpServletRequest request)
+        throws NoSuchAlgorithmException {
+
+        // User-Agent 와 ip 정보 얻어오기
+        // User-Agent 정보 sha-256 으로 해싱
+        String userAgentDigest = userInfoManager.getUserAgentDigest(request);
+        portfolioConfirmDto.setUserAgentDigest(userAgentDigest);
+
+        // 유저의 ip 정보 가져오기
+        String ip = userInfoManager.getIp(request);
+        portfolioConfirmDto.setIp(ip);
+
+        // confirm 테이블의 인덱스와 일치하는 정보 가져오기
+        Optional<PortfolioConfirm> portfolioConfirm = portfolioConfirmRepository.findById(
+            portfolioConfirmDto.getConfirmIdx());
+        // 일치하는 정보가 없을 때 예외 처리
+        if (!portfolioConfirm.isPresent()) {
+            throw new PortfolioConfirmNotFoundException();
+        }
+        // 새 dto 에 db 에서 가져온 정보 옮기기
+        PortfolioConfirmDto portfolioConfirmDtoFromDb = PortfolioConfirmDto.builder()
+            .email(portfolioConfirm.get().getEmail())
+            .confirmCode(portfolioConfirm.get().getConfirm_code())
+            .userAgentDigest(portfolioConfirm.get().getUser_agent_digest())
+            .ip(portfolioConfirm.get().getIp()).build();
+
+        // 인증번호가 일치하지 않을 때
+        if (portfolioConfirmDto.getConfirmCode() != portfolioConfirmDtoFromDb.getConfirmCode()) {
+            throw new PortfolioConfirmUnauthorizedException();
+        }
+        // User-Agent digest 가 일치하지 않을 때
+        if (!Objects.equals(portfolioConfirmDto.getUserAgentDigest(),
+            portfolioConfirmDtoFromDb.getUserAgentDigest())) {
+            throw new PortfolioConfirmUnauthorizedException();
+        }
+        // ip가 일치하지 않을때
+        if (!Objects.equals(portfolioConfirmDto.getIp(), portfolioConfirmDtoFromDb.getIp())) {
+            throw new PortfolioConfirmUnauthorizedException();
+        }
+        // email이 일치하지 않을때
+        if (!Objects.equals(portfolioConfirmDto.getEmail(), portfolioConfirmDtoFromDb.getEmail())) {
+            throw new PortfolioConfirmUnauthorizedException();
+        }
+
+    }
 }

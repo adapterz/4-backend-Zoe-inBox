@@ -15,6 +15,10 @@ final public class ConstantManager {
     public final String UNEXPECTED_ERROR = "unexpected_error";
     public final String AT_LEAST_ONE_SHOULD_BE_ON = "at_least_one_should_be_on";
     public final String SEND_MAIL = "send_mail";
+    public final String NOT_FOUND = "not_found";
+    public final String AUTH_FAIL = "auth_fail";
+
+    public final String AUTHORIZED = "authorized";
 
     // Controller 에서 쓰일 상수 값
     public final String FILTER = "filter";
