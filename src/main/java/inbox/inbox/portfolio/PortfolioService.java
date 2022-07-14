@@ -1,13 +1,21 @@
 package inbox.inbox.portfolio;
 
+import static inbox.inbox.utils.ConstantManager.BE;
+import static inbox.inbox.utils.ConstantManager.FE;
+
 import inbox.inbox.utils.UserInfoManager;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 // 포트폴리오 서비스
 @RequiredArgsConstructor
@@ -104,7 +112,7 @@ public class PortfolioService {
         if (!Objects.equals(portfolioConfirmDto.getIp(), portfolioConfirmDtoFromDb.getIp())) {
             throw new PortfolioConfirmUnauthorizedException();
         }
-        // email이 일치하지 않을때
+        // email 이 일치하지 않을때
         if (!Objects.equals(portfolioConfirmDto.getEmail(), portfolioConfirmDtoFromDb.getEmail())) {
             throw new PortfolioConfirmUnauthorizedException();
         }

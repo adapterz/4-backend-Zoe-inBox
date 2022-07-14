@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 // 유효성 검사 어노테이션
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(validatedBy = {ValuesAllowedValidator.class})
 public @interface ValuesAllowed {
 

@@ -1,10 +1,13 @@
 package inbox.inbox.exception;
 
+import inbox.inbox.portfolio.PortfolioConfirmNotFoundException;
+import inbox.inbox.portfolio.PortfolioConfirmUnauthorizedException;
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.portfolio.PortfolioRangeConflictException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -49,6 +52,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
             .message(constant.NOT_FOUND).build();
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.NOT_FOUND);
     }
+
     // confirm 테이블의 정보와 인증 요청한 유저의 정보 or 인증번호가 일치하지 않을 때
     @ExceptionHandler(PortfolioConfirmUnauthorizedException.class)
     public ResponseEntity<Object> handlePortfolioConfirmUnauthorizedException() {
