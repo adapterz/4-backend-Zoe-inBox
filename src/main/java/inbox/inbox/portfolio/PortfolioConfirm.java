@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "confirm")
-public class PortfolioEmailConfirm {
+public class PortfolioConfirm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class PortfolioEmailConfirm {
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp created_at;
     @Builder
-    public PortfolioEmailConfirm(Integer confirmCode, String email, String ip,
+    public PortfolioConfirm(Integer confirmCode, String email, String ip,
         String userAgentDigest) {
         this.confirm_code = confirmCode;
         this.email = email;

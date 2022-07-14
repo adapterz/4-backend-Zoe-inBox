@@ -21,22 +21,25 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     // 예상치 못한 런타임 에러
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleUnexpectedException() {
-        ExceptionMessage exceptionMessage = new ExceptionMessage(constant.UNEXPECTED_ERROR);
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.UNEXPECTED_ERROR).build();
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // 유효하지 않은 param
+    // 유효하지 않음
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleParamConstraintViolationException() {
-        ExceptionMessage exceptionMessage = new ExceptionMessage(constant.INVALID_REQUEST);
+    public ResponseEntity<Object> handleConstraintViolationException() {
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.INVALID_REQUEST).build();
         return new ResponseEntity(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
 
     // 포트폴리오 range 의 조회 조건을 모두 off 했을 때
     @ExceptionHandler(PortfolioRangeConflictException.class)
     public ResponseEntity<Object> handlePortfolioConflictException() {
-        ExceptionMessage exceptionMessage = new ExceptionMessage(
-            constant.AT_LEAST_ONE_SHOULD_BE_ON);
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.AT_LEAST_ONE_SHOULD_BE_ON).build();
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.CONFLICT);
     }
+
 }
