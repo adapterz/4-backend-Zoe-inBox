@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// Confirm 테이블
+// Confirm 테이블에 매핑해줄 엔티티
 @Getter
 @NoArgsConstructor
 @Entity
