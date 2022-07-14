@@ -8,4 +8,21 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-      format_sql: true
+  mail:
+    host: ${SMTP_HOST}
+    port: 587
+    username: ${USER_EMAIL}
+    password: ${USER_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+logging:
+  level:
+    org.springframework: DEBUG

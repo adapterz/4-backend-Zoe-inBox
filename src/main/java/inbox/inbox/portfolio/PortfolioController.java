@@ -1,20 +1,22 @@
 package inbox.inbox.portfolio;
 
-import static inbox.inbox.config.ConstantList.OFF;
-import static inbox.inbox.config.ConstantList.BE;
-import static inbox.inbox.config.ConstantList.FE;
-import static inbox.inbox.config.ConstantList.PORTFOLIO_PATH;
+import static inbox.inbox.utils.ConstantManager.BE;
+import static inbox.inbox.utils.ConstantManager.FE;
+import static inbox.inbox.utils.ConstantManager.OFF;
+import static inbox.inbox.utils.ConstantManager.PORTFOLIO_PATH;
 
-import inbox.inbox.config.ApplicationContextConfig;
-import inbox.inbox.config.ConstantList;
+import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import java.security.NoSuchAlgorithmException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -23,20 +25,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 // 포트폴리오 컨트롤러
+@RequiredArgsConstructor
 @Validated
+@RequestMapping(PORTFOLIO_PATH)
 @RestController
 public class PortfolioController {
 
+    private final PortfolioService service;
+    private final ConstantManager constant;
+    private final CookieManager cookieManager;
 
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
-    @GetMapping(PORTFOLIO_PATH + "/range/{option}")
+    @GetMapping("/range/{option}")
     public ResponseEntity<Object> switchRange(
         @PathVariable("option") @ValuesAllowed(values = {FE, BE}) String option,
         HttpServletResponse response, HttpServletRequest request) {
-        // 쿠키 관리해줄 CookieManager bean 객체 위치 가져오고 필요한 변수 정의
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-            ApplicationContextConfig.class);
-        CookieManager cookieManager = applicationContext.getBean(CookieManager.class);
+        // 필요한 변수 정의
         Cookie[] cookies = cookieManager.getAllRequestCookie(request);
         boolean isOtherOff = false;
         String cookieValue = null;
@@ -50,8 +54,10 @@ public class PortfolioController {
             for (Cookie tempCookie : cookies) {
                 String tempCookieName = tempCookie.getName().toString();
                 // 목적 2
-                if ((Objects.equals(option, BE) && Objects.equals(tempCookieName, FE)) || (
-                    Objects.equals(option, FE) && Objects.equals(tempCookieName, BE))) {
+                if ((Objects.equals(option, BE) && Objects.equals(tempCookieName,
+                    FE)) || (
+                    Objects.equals(option, FE) && Objects.equals(tempCookieName,
+                        BE))) {
                     String otherOptionSwitch = tempCookie.getValue().toString();
                     if (Objects.equals(otherOptionSwitch, OFF)) {
                         isOtherOff = true;
@@ -70,13 +76,26 @@ public class PortfolioController {
         }
         // 포트폴리오 다른 range 조회 옵션이 off 일 때 해당 range 조회 옵션 off 로 못함(range 가 2갠데 둘다 off 할 수 없음)
         else if (isOtherOff) {
-            throw new PortfolioConflictException();
+            throw new PortfolioRangeConflictException();
         }
         // 기존 영상 조회 옵션을 on 해놨을 때 off 로 전환 - 쿠키 생성
         else {
             response.addCookie(cookieManager.makeCookie(option, OFF, 24 * 60 * 60));
         }
-
         return ResponseEntity.ok().build();
+    }
+
+    // 영상 업로드 전 인증 메일 발송
+    @PostMapping("/email")
+    public PortfolioResponseMessage confirmEmail(
+        @RequestBody PortfolioEmailConfirmDto portfolioEmailConfirmDto,
+        HttpServletRequest request) throws NoSuchAlgorithmException {
+        // 인증 메일 보내기
+        service.sendConfirmCodeForEmailAuthentication(
+            portfolioEmailConfirmDto);
+        // db에 (인증번호, 유저 ip, User-Agent, email) 저장
+        long confirmIdx = service.addPortfolioEmailConfirm(portfolioEmailConfirmDto, request);
+        return PortfolioResponseMessage.builder().message(constant.SEND_MAIL).confirmIdx(confirmIdx)
+            .build();
     }
 }
