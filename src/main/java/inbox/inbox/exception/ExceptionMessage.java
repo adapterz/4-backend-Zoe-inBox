@@ -1,14 +1,23 @@
 package inbox.inbox.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 // 예외 메세지 클래스
-@Data
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExceptionMessage {
 
     private String message;
+    private String error;
+
+    @Builder
+    ExceptionMessage(String message, String error) {
+        this.message = message;
+        this.error = error;
+    }
+
 }

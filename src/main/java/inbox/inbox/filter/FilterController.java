@@ -50,11 +50,14 @@ public class FilterController {
             }
         }
         if (isOff && Objects.equals(option, ON)) {
-            response.addCookie(cookieManager.deleteCookie(constant.FILTER));
+            //response.addCookie(cookieManager.deleteCookie(constant.FILTER));
+            response.addHeader("Set-Cookie",
+                cookieManager.deleteCookie(constant.FILTER).toString());
         }
         if (!isOff && Objects.equals(option, OFF)) {
-            response.addCookie(
-                cookieManager.makeCookie(constant.FILTER, OFF, 24 * 60 * 60));
+            response.addHeader(
+                "Set-Cookie",
+                cookieManager.makeCookie(constant.FILTER, OFF, 24 * 60 * 60).toString());
         }
 
         return ResponseEntity.ok().build();
