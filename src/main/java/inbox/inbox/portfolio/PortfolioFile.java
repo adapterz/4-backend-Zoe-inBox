@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// file 테이블에 매핑해줄 엔티티
+// file 테이블 엔티티
 @Getter
 @Setter
 @NoArgsConstructor
