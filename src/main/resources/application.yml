@@ -1,13 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}/in_box_dev
+    url: ${DB_URL}/in_box
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   mail:
     host: ${SMTP_HOST}
     port: 587
