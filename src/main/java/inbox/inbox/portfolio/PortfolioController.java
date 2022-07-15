@@ -106,7 +106,8 @@ public class PortfolioController {
 
         // 기존 포트폴리오 조회 조건이 off 일 때 쿠키 삭제 - 쿠키가 없는게 on 상태
         if (Objects.equals(cookieValue, OFF)) {
-            response.addCookie(cookieManager.deleteCookie(option));
+            //response.addCookie(cookieManager.deleteCookie(option));
+            response.addHeader("Set-Cookie", cookieManager.deleteCookie(option).toString());
         }
         // 포트폴리오 다른 range 조회 옵션이 off 일 때 해당 range 조회 옵션 off 로 못함(range 가 2갠데 둘다 off 할 수 없음)
         else if (isOtherOff) {
@@ -114,7 +115,9 @@ public class PortfolioController {
         }
         // 기존 영상 조회 옵션을 on 해놨을 때 off 로 전환 - 쿠키 생성
         else {
-            response.addCookie(cookieManager.makeCookie(option, OFF, 24 * 60 * 60));
+            //response.addCookie(cookieManager.makeCookie(option, OFF, 24 * 60 * 60));
+            response.addHeader("Set-Cookie",
+                cookieManager.makeCookie(option, OFF, 24 * 60 * 60).toString());
         }
         return ResponseEntity.ok().build();
 
