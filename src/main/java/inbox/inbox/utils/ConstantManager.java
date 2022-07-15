@@ -23,6 +23,7 @@ final public class ConstantManager {
     public final String AUTH_FAIL = "auth_fail";
 
     public final String AUTHORIZED = "authorized";
+    public final String NOT_EXIST = "not_exist";
 
     // Controller 에서 쓰일 상수 값
     public final String FILTER = "filter";
