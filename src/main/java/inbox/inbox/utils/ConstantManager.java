@@ -25,10 +25,16 @@ final public class ConstantManager {
     public final String AUTHORIZED = "authorized";
     public final String NOT_EXIST = "not_exist";
 
-    // Controller 에서 쓰일 상수 값
+    // 그 밖의 상수 값
     public final String FILTER = "filter";
     public static final String ON = "on";
     public static final String OFF = "off";
     public static final String FE = "fe";
     public static final String BE = "be";
+
+    public static final String MP4 = "mp4";
+    public static final String AVI = "avi";
+    public static final String WEBM = "webm";
+    public static final String WMV = "wmv";
+    public static final String MOV = "mov";
 }

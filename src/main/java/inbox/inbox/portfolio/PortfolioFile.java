@@ -26,7 +26,7 @@ public class PortfolioFile {
     private Long file_idx;
     @Column(columnDefinition = "CHAR(64)")
     private String file_name;
-    @Column(columnDefinition = "CHAR(9)")
+    @Column(columnDefinition = "CHAR(4)")
     private String extension;
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp created_at;
