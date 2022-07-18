@@ -6,10 +6,13 @@ import inbox.inbox.portfolio.PortfolioNotFoundException;
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.portfolio.PortfolioRangeConflictException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -62,6 +65,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
             .message(constant.AUTH_FAIL).build();
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.UNAUTHORIZED);
     }
+
     // 유저의 요청은 올바르지만 응답해줄 포트폴리오 정보가 없을 때
     @ExceptionHandler(PortfolioNotFoundException.class)
     public ResponseEntity<Object> handlePortfolioNotFoundException() {

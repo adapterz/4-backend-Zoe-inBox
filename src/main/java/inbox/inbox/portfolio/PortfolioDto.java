@@ -9,6 +9,7 @@ import static inbox.inbox.utils.ConstantManager.MP4;
 import static inbox.inbox.utils.ConstantManager.WEBM;
 import static inbox.inbox.utils.ConstantManager.WMV;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import inbox.inbox.exception.ValidationGroup;
 import inbox.inbox.exception.ValidationGroup.PortfolioValidationGroup;
 import inbox.inbox.exception.ValuesAllowed;
@@ -77,6 +78,5 @@ public class PortfolioDto {
         this.confirmCode = confirmCode;
         this.email = email;
     }
-
 
 }
