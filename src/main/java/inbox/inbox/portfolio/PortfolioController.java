@@ -37,7 +37,6 @@ import java.util.Objects;
 // 포트폴리오 컨트롤러
 @Validated
 @RequiredArgsConstructor
-@RequestMapping(PORTFOLIO_PATH)
 @RestController
 public class PortfolioController {
 
@@ -47,7 +46,7 @@ public class PortfolioController {
 
     // 포트폴리오 정보 업로드
     @Validated(PortfolioValidationGroup.class)
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = PORTFOLIO_PATH, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody ResponseEntity<Object> uploadPortfolio(
         @ModelAttribute("PortfolioDto") @Valid PortfolioDto portfolioDto,
         BindingResult bindingResult,
@@ -73,14 +72,14 @@ public class PortfolioController {
 
     // 포트폴리오 영상 정보 가져오기
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/file")
+    @GetMapping(PORTFOLIO_PATH + "/file")
     public PortfolioResponseMessage requestPortfolio() {
         return service.getPortfolioInfo();
 
     }
 
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
-    @GetMapping("/range/{option}")
+    @GetMapping(PORTFOLIO_PATH + "/range/{option}")
     public ResponseEntity<Object> switchRange(
         @PathVariable("option") @ValuesAllowed(values = {FE, BE}) String option,
         HttpServletResponse response, HttpServletRequest request) {
@@ -135,7 +134,7 @@ public class PortfolioController {
 
     // 영상 업로드 전 인증 메일 발송
     @Validated(PortfolioConfirmValidationGroup.class)
-    @PostMapping("/email")
+    @PostMapping(PORTFOLIO_PATH + "/email")
     public PortfolioResponseMessage confirmEmail(
         @RequestBody @Valid PortfolioConfirmDto portfolioConfirmDto,
         HttpServletRequest request) throws NoSuchAlgorithmException {
