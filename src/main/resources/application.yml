@@ -1,4 +1,6 @@
 spring:
+  mvc:
+    dispatch-options-request: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}/in_box
