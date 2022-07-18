@@ -44,7 +44,7 @@ public class PortfolioDto {
     private String range;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
-    @Size(max = 8, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
+    @Size(max = 20, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
     private String title;
 
     @NotNull(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
@@ -53,7 +53,7 @@ public class PortfolioDto {
     private Date date;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
-    @Size(max = 12, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
+    @Size(max = 30, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
     private String about;
 
     @Min(value = 1, message = "confirmIdx", groups = {

@@ -26,11 +26,11 @@ public class Portfolio {
     private Long portfolio_idx;
     @Column(columnDefinition = "TINYINT")
     private Byte rangeVal;
-    @Column(columnDefinition = "CHAR(8)")
+    @Column(columnDefinition = "CHAR(20)")
     private String title;
     @Column(columnDefinition = "DATE")
     private Date portfolio_date;
-    @Column(columnDefinition = "CHAR(12)")
+    @Column(columnDefinition = "CHAR(30)")
     private String about;
     @OneToOne
     @JoinColumn(name = "file_idx")
