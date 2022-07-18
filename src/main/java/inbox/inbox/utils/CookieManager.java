@@ -23,8 +23,9 @@ public class CookieManager {
          */
 
         ResponseCookie newCookie = ResponseCookie.from(key, value).maxAge(maxAge).httpOnly(true)
-            .path("/").sameSite("None").secure(true).build();
+            .path("/").build();
         //offCookie.setSecure(true);
+        //sameSite("None").secure(true)
         return newCookie;
     }
 
@@ -39,7 +40,8 @@ public class CookieManager {
 
          */
         ResponseCookie deleteCookie = ResponseCookie.from(key, null).maxAge(0).httpOnly(true)
-            .path("/").sameSite("None").secure(true).build();
+            .path("/").build();
+        //.sameSite("None").secure(true)
         return deleteCookie;
     }
 

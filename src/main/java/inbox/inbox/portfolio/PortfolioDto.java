@@ -1,8 +1,13 @@
 package inbox.inbox.portfolio;
 
 
+import static inbox.inbox.utils.ConstantManager.AVI;
 import static inbox.inbox.utils.ConstantManager.BE;
 import static inbox.inbox.utils.ConstantManager.FE;
+import static inbox.inbox.utils.ConstantManager.MOV;
+import static inbox.inbox.utils.ConstantManager.MP4;
+import static inbox.inbox.utils.ConstantManager.WEBM;
+import static inbox.inbox.utils.ConstantManager.WMV;
 
 import inbox.inbox.exception.ValidationGroup;
 import inbox.inbox.exception.ValidationGroup.PortfolioValidationGroup;
@@ -13,7 +18,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Builder;
@@ -27,8 +32,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PortfolioDto {
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "filePath")
+    @ValuesAllowed(values = {MP4, AVI, WEBM, WMV, MOV}, groups = {
+        PortfolioValidationGroup.class}, message = "filePath")
     @Size(groups = {
-        ValidationGroup.PortfolioValidationGroup.class}, min = 66, max = 74, message = "filePath")
+        ValidationGroup.PortfolioValidationGroup.class}, min = 66, max = 69, message = "filePath")
     private String filePath;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "range")
@@ -41,7 +48,7 @@ public class PortfolioDto {
     private String title;
 
     @NotNull(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
-    @Past(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
+    @PastOrPresent(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
     @DateTimeFormat(pattern = "yyyyMMdd")
     private Date date;
 
@@ -49,7 +56,7 @@ public class PortfolioDto {
     @Size(max = 12, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
     private String about;
 
-    @Min(value = 1L, message = "confirmIdx", groups = {
+    @Min(value = 1, message = "confirmIdx", groups = {
         ValidationGroup.PortfolioValidationGroup.class})
     private long confirmIdx;
 

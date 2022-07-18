@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// Confirm 테이블에 매핑해줄 엔티티
+// Confirm 테이블 엔티티
 @Getter
 @NoArgsConstructor
 @Entity
@@ -24,12 +24,13 @@ public class PortfolioConfirm {
     private Integer confirm_code;
     @Column(nullable = false, length = 100)
     private String email;
-    @Column(columnDefinition = "CHAR(39)")
+    @Column(nullable = false, length = 39)
     private String ip;
     @Column(columnDefinition = "CHAR(64)")
     private String user_agent_digest;
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp created_at;
+
     @Builder
     public PortfolioConfirm(Integer confirmCode, String email, String ip,
         String userAgentDigest) {

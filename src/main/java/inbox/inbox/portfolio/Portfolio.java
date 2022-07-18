@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// Portfolio 테이블에 매핑해줄 엔티티
+// Portfolio 테이블 엔티티
 @Getter
 @NoArgsConstructor
 @Entity

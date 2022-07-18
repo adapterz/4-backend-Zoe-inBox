@@ -34,8 +34,7 @@ public class PortfolioService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         StringBuilder confirmText = new StringBuilder("인증번호: ");
         // 6자리 난수 생성 100000~999999
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
+        Random random = new Random(System.currentTimeMillis());
         int confirmCode = (random.nextInt(900000) + 100000) % 1000000;
 
         // 수신자
@@ -49,7 +48,9 @@ public class PortfolioService {
         portfolioConfirmDto.setConfirmCode(confirmCode);
     }
 
+
     // Confirm 테이블에 이메일 인증을 위한 정보 추가 (인증번호, 유저 ip, User-Agent, email)
+   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public long addPortfolioEmailConfirm(PortfolioConfirmDto portfolioConfirmDto,
         HttpServletRequest request) throws NoSuchAlgorithmException {
 
@@ -122,7 +123,7 @@ public class PortfolioService {
     }
 
     // 포트폴리오 정보 추가
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public void addPortfolio(PortfolioDto portfolioDto) {
         Byte rangeMappingValue = 0;
         // file table 에 저장해줄 객체 생성 및 의존성 주입
@@ -147,5 +148,50 @@ public class PortfolioService {
         portfolio.setFile(portfolioFile);
 
         portfolioRepository.save(portfolio);
+    }
+
+    // 포트폴리오 정보 가져오기
+    public PortfolioResponseMessage getPortfolioInfo() {
+        // 필요한 변수 선언
+        String range = "";
+        Optional<Portfolio> portfolio;
+
+        // portfolio 테이블의 로우 개수
+        long count = portfolioRepository.count();
+        if (count == 0) {
+            throw new PortfolioNotFoundException();
+        }
+
+        // 1 부터 로우 개수 까지 랜덤한 숫자 뽑기(포트폴리오 테이블 인덱스)
+        Random random = new Random(System.currentTimeMillis());
+        while (true) {
+            int randomIdx = random.nextInt((int) count) + 1;
+
+            portfolio = portfolioRepository.findById((long) randomIdx);
+
+            // 해당 인덱스 정보가 존재하지 않으면 다시 랜덤한 숫자 뽑기
+            if (!portfolio.isPresent()) {
+                continue;
+            }
+            // 존재하면 반복문 종료
+            break;
+        }
+        // rangeVal 이 0이면 be, 1이면 fe로 가공
+        if (portfolio.get().getRangeVal() == 0) {
+            range = BE;
+        } else if (portfolio.get().getRangeVal() == 1) {
+            range = FE;
+        } else {
+            throw new RuntimeException();
+        }
+
+        return PortfolioResponseMessage.builder().message("portfolio_data").range(range)
+            .title(portfolio.get().getTitle())
+            .fileName(portfolio.get().getPortfolioFile().getFile_name())
+            .extension(portfolio.get().getPortfolioFile().getExtension())
+            .portfolioDate(portfolio.get().getPortfolio_date()).about(
+                portfolio.get().getAbout())
+            .email(portfolio.get().getEmail()).createdDate(portfolio.get().getCreated_at())
+            .build();
     }
 }

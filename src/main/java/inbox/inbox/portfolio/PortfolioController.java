@@ -14,6 +14,7 @@ import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -66,6 +68,14 @@ public class PortfolioController {
         service.addPortfolio(portfolioDto);
 
         return ResponseEntity.created(URI.create(PORTFOLIO_PATH)).build();
+
+    }
+
+    // 포트폴리오 영상 정보 가져오기
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/file")
+    public PortfolioResponseMessage requestPortfolio() {
+        return service.getPortfolioInfo();
 
     }
 
