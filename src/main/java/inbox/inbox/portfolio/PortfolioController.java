@@ -46,14 +46,17 @@ public class PortfolioController {
 
     // 포트폴리오 정보 업로드
     @Validated(PortfolioValidationGroup.class)
-    @PostMapping(value = PORTFOLIO_PATH, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping( PORTFOLIO_PATH)
     public @ResponseBody ResponseEntity<Object> uploadPortfolio(
-        @ModelAttribute("PortfolioDto") @Valid PortfolioDto portfolioDto,
-        BindingResult bindingResult,
-        HttpServletRequest request) throws NoSuchAlgorithmException {
+        @RequestBody @Valid PortfolioDto portfolioDto,HttpServletRequest request) throws NoSuchAlgorithmException {
+        /*
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+
+        BindingResult bindingResult,
         }
+
+         */
         // 요청한 유저정보 일치여부 확인 및 인증번호 확인
 
         PortfolioConfirmDto portfolioConfirmDto = PortfolioConfirmDto.builder().confirmIdx(
