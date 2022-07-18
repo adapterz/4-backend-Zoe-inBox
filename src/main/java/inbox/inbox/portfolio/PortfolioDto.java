@@ -24,7 +24,6 @@ import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 // Portfolio 테이블과 관련된 데이터 옮겨줄 객체의 클래스
 @Data
@@ -49,7 +48,7 @@ public class PortfolioDto {
 
     @NotNull(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
     @PastOrPresent(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
-    @DateTimeFormat(pattern = "yyyyMMdd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
     private Date date;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")

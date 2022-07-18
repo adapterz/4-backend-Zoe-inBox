@@ -69,4 +69,17 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
             .message(constant.NOT_EXIST).build();
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.OK);
     }
+
+    // post 요청 시 payload 의 json 을 객체로 mapping 할 때 type 매칭이 안되는 예외 핸들러
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus httpStatus, WebRequest request) {
+
+        String exceptionString = exception.getMostSpecificCause().toString();
+
+        String[] exceptionArray = exceptionString.split("\"");
+        int arrayLen = exceptionArray.length;
+        ExceptionMessage exceptionMessage = ExceptionMessage.builder()
+            .message(constant.INVALID_REQUEST).error(exceptionArray[arrayLen-2]).build();
+        return new ResponseEntity(exceptionMessage, HttpStatus.BAD_REQUEST);
+    }
 }
