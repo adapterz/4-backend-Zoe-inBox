@@ -53,7 +53,7 @@ public class PortfolioService {
 
 
     // Confirm 테이블에 이메일 인증을 위한 정보 추가 (인증번호, 유저 ip, User-Agent, email)
-   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public long addPortfolioEmailConfirm(PortfolioConfirmDto portfolioConfirmDto,
         HttpServletRequest request) throws NoSuchAlgorithmException {
 
@@ -126,7 +126,7 @@ public class PortfolioService {
     }
 
     // 포트폴리오 정보 추가
-   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public void addPortfolio(PortfolioDto portfolioDto) {
         Byte rangeMappingValue = 0;
         // file table 에 저장해줄 객체 생성 및 의존성 주입
