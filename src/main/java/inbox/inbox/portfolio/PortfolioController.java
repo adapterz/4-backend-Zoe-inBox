@@ -40,13 +40,6 @@ public class PortfolioController {
     private final ConstantManager constant;
     private final CookieManager cookieManager;
 
-    // 백엔드 서버에 갇힌 쿠키 가져오기
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/")
-    public String plzCookie() {
-        return "쿠키님 제발 백엔드 서버에 있지 마시고 프론트 서버로 가주세요";
-    }
-
     // 포트폴리오 정보 업로드
     @Validated(PortfolioValidationGroup.class)
     @PostMapping(PORTFOLIO_PATH)
