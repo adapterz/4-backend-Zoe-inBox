@@ -52,7 +52,7 @@ public class PortfolioDto {
     private Date date;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
-    @Size(max = 30, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
+    @Size(max = 20, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
     private String about;
 
     @Min(value = 1, message = "confirmIdx", groups = {
