@@ -66,8 +66,28 @@ public class PortfolioController {
     // 포트폴리오 영상 정보 가져오기
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(PORTFOLIO_PATH + "/file")
-    public PortfolioResponseMessage requestPortfolio() {
-        return service.getPortfolioInfo();
+    public PortfolioResponseMessage requestPortfolio(HttpServletRequest request) {
+        // 유저가 원하는 포트폴리오의 range 체크
+        Cookie[] cookies = cookieManager.getAllRequestCookie(request);
+        String backendSwitch = ON;
+        String frontendSwitch = ON;
+
+        if (cookies != null) {
+            for (Cookie tempCookie : cookies) {
+                String tempCookieName = tempCookie.getName();
+                String tempCookieValue = tempCookie.getValue();
+                if (Objects.equals(tempCookieName, BE) && Objects.equals(tempCookieValue,
+                    OFF)) {
+                    backendSwitch = OFF;
+                }
+                if (Objects.equals(tempCookieName, FE) && Objects.equals(tempCookieValue,
+                    OFF)) {
+                    frontendSwitch = OFF;
+                }
+            }
+        }
+
+        return service.getPortfolioInfo(backendSwitch,frontendSwitch);
 
     }
 

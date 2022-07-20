@@ -154,30 +154,52 @@ public class PortfolioService {
     }
 
     // 포트폴리오 정보 가져오기
-    public PortfolioResponseMessage getPortfolioInfo() {
+    public PortfolioResponseMessage getPortfolioInfo(String backendSwitch, String frontendSwitch) {
         // 필요한 변수 선언
         String range = "";
         Optional<Portfolio> portfolio;
+        List<Portfolio> portfolioList = null;
+        long rowCount;
 
         // portfolio 테이블의 로우 개수
-        long count = portfolioRepository.count();
-        if (count == 0) {
+        long tableCount = portfolioRepository.count();
+        if (tableCount == 0) {
             throw new PortfolioNotFoundException();
         }
-
-        // 1 부터 로우 개수 까지 랜덤한 숫자 뽑기(포트폴리오 테이블 인덱스)
-        Random random = new Random(System.currentTimeMillis());
-        while (true) {
-            int randomIdx = random.nextInt((int) count) + 1;
-
-            portfolio = portfolioRepository.findById((long) randomIdx);
-
-            // 해당 인덱스 정보가 존재하지 않으면 다시 랜덤한 숫자 뽑기
-            if (!portfolio.isPresent()) {
-                continue;
+        // 선택한 범위 데이터 가져오기
+        // 모든 범위
+        if (Objects.equals(backendSwitch, ON) && Objects.equals(frontendSwitch, ON)) {
+            portfolioList = portfolioRepository.findAll();
+        }
+        // 백엔드 포트폴리오만
+        if (Objects.equals(backendSwitch, ON) && Objects.equals(frontendSwitch, OFF)) {
+            portfolioList = portfolioRepository.findByRangeAll((byte) 0);
+            if (portfolioList.size() == 0) {
+                throw new PortfolioNotFoundException();
             }
-            // 존재하면 반복문 종료
-            break;
+        }
+        // 프론트 포트폴리오만
+        if (Objects.equals(backendSwitch, OFF) && Objects.equals(frontendSwitch, ON)) {
+            portfolioList = portfolioRepository.findByRangeAll((byte) 1);
+            if (portfolioList.size() == 0) {
+                throw new PortfolioNotFoundException();
+            }
+        }
+        if (portfolioList == null) {
+            throw new RuntimeException();
+        }
+        rowCount = portfolioList.size();
+
+        // 1 부터 선택 범위의 로우 개수 까지 랜덤한 숫자 뽑기(포트폴리오 테이블 인덱스)
+        // TODO row 개수가 int 범위보다 큰 숫자일 경우가 있기 때문에 랜덤 뽑기 로직 변경 필요
+        Random random = new Random(System.currentTimeMillis());
+        int randomIdx = random.nextInt((int) rowCount);
+
+        portfolio = portfolioRepository.findById(portfolioList.get(randomIdx).getPortfolio_idx());
+
+        // 해당 인덱스 정보가 존재하지 않으면 예외 발생
+        if (!portfolio.isPresent()) {
+            throw new RuntimeException();
         }
         // rangeVal 이 0이면 be, 1이면 fe로 가공
         if (portfolio.get().getRangeVal() == 0) {
