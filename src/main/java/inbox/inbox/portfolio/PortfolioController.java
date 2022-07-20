@@ -3,6 +3,7 @@ package inbox.inbox.portfolio;
 import static inbox.inbox.utils.ConstantManager.BE;
 import static inbox.inbox.utils.ConstantManager.FE;
 import static inbox.inbox.utils.ConstantManager.OFF;
+import static inbox.inbox.utils.ConstantManager.ON;
 import static inbox.inbox.utils.ConstantManager.PORTFOLIO_PATH;
 
 import inbox.inbox.exception.ValidationGroup.PortfolioConfirmValidationGroup;

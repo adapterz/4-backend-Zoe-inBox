@@ -1,6 +1,5 @@
 package inbox.inbox.portfolio;
 
-
 import static inbox.inbox.utils.ConstantManager.AVI;
 import static inbox.inbox.utils.ConstantManager.BE;
 import static inbox.inbox.utils.ConstantManager.FE;
