@@ -13,6 +13,7 @@ final public class ConstantManager {
     // 경로 이름
     public static final String FILTER_PATH = "/filters";
     public static final String PORTFOLIO_PATH = "/portfolios";
+    public static final String COOKIE_PATH = "/cookies";
 
     // 응답 메세지
     public final String INVALID_REQUEST = "invalid_request";
@@ -24,6 +25,7 @@ final public class ConstantManager {
 
     public final String AUTHORIZED = "authorized";
     public final String NOT_EXIST = "not_exist";
+    public final String GET_COOKIE = "get_cookie";
 
     // 그 밖의 상수 값
     public final String FILTER = "filter";
