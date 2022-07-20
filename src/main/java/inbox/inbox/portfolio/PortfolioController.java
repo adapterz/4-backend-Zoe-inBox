@@ -66,16 +66,24 @@ public class PortfolioController {
     // 포트폴리오 영상 정보 가져오기
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(PORTFOLIO_PATH + "/file")
-    public PortfolioResponseMessage requestPortfolio(HttpServletRequest request) {
+    public PortfolioResponseMessage requestPortfolio(HttpServletRequest request,
+        HttpServletResponse response) {
         // 유저가 원하는 포트폴리오의 range 체크
         Cookie[] cookies = cookieManager.getAllRequestCookie(request);
         String backendSwitch = ON;
         String frontendSwitch = ON;
+        long previousSeenIdx = -1;
+        boolean isDigit = false;
 
+        /*
+         * 목적 1. 포트폴리오 range 의 BE 나 FE on/off 여부
+         * 목적 2. 바로 직전에 조회한 포트폴리오 idx 제외
+         */
         if (cookies != null) {
             for (Cookie tempCookie : cookies) {
                 String tempCookieName = tempCookie.getName();
                 String tempCookieValue = tempCookie.getValue();
+                // 목적 1
                 if (Objects.equals(tempCookieName, BE) && Objects.equals(tempCookieValue,
                     OFF)) {
                     backendSwitch = OFF;
@@ -84,11 +92,25 @@ public class PortfolioController {
                     OFF)) {
                     frontendSwitch = OFF;
                 }
+                // 목적 2
+                if (Objects.equals(tempCookieName, constant.PREVIOUS_SEEN_IDX)) {
+                    isDigit = tempCookieValue.matches("-?\\d+");
+                    if (isDigit) {
+                        previousSeenIdx = Long.parseLong(tempCookieValue);
+                    }
+                }
             }
         }
+        PortfolioResponseMessage portfolioResponseMessage = service.getPortfolioInfo(backendSwitch,
+            frontendSwitch, previousSeenIdx);
 
-        return service.getPortfolioInfo(backendSwitch,frontendSwitch);
+        String portfolioIdx = Long.toString(portfolioResponseMessage.getPortfolioIdx());
 
+        // 현재 조회한 포트폴리오 idx 쿠키 발급 -> 바로 다음번 요청에는 해당 포트폴리오 정보 제외하고 랜덤으로 뽑아줌
+        response.addHeader("Set-Cookie",
+            cookieManager.makeCookie(constant.PREVIOUS_SEEN_IDX,
+                portfolioIdx, 24 * 60 * 60).toString());
+        return portfolioResponseMessage;
     }
 
     // 조회할 포트폴리오 범위(be/fe) 정하기 (쿠키로 on/off 여부 체크, 유저가 off 선택할 경우 쿠키 발급)
@@ -108,13 +130,13 @@ public class PortfolioController {
          */
         if (cookies != null) {
             for (Cookie tempCookie : cookies) {
-                String tempCookieName = tempCookie.getName().toString();
+                String tempCookieName = tempCookie.getName();
                 // 목적 2
                 if ((Objects.equals(option, BE) && Objects.equals(tempCookieName,
                     FE)) || (
                     Objects.equals(option, FE) && Objects.equals(tempCookieName,
                         BE))) {
-                    String otherOptionSwitch = tempCookie.getValue().toString();
+                    String otherOptionSwitch = tempCookie.getValue();
                     if (Objects.equals(otherOptionSwitch, OFF)) {
                         isOtherOff = true;
                     }

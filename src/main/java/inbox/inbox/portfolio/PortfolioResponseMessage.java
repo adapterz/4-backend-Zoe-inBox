@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_DEFAULT)
 public class PortfolioResponseMessage {
 
+    private long portfolioIdx;
     private String message;
     private String range;
     private String title;
@@ -29,9 +30,11 @@ public class PortfolioResponseMessage {
     private String createdDate;
 
     @Builder
-    PortfolioResponseMessage(String message, String range, String title, String fileName,
+    PortfolioResponseMessage(long portfolioIdx, String message, String range, String title,
+        String fileName,
         String extension, Date portfolioDate, String about, String email,
         long confirmIdx, Date createdDate) {
+        this.portfolioIdx = portfolioIdx;
         this.message = message;
         this.range = range;
         this.title = title;

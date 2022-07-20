@@ -33,6 +33,9 @@ final public class ConstantManager {
     public static final String OFF = "off";
     public static final String FE = "fe";
     public static final String BE = "be";
+    public final String PREVIOUS_SEEN_IDX = "previous_seen_idx";
+
+    // 유효한 영상 확장자
 
     public static final String MP4 = "mp4";
     public static final String AVI = "avi";
