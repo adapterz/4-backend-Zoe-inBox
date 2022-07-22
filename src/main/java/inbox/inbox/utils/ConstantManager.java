@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 final public class ConstantManager {
 
     // 프론트 서버
-    public static final String FRONT_URL = System.getenv("FRONT_URL");
+    public static final String FRONT_DEV = System.getenv("FRONT_DEV");
+    public static final String FRONT_PRO = System.getenv("FRONT_PRO");
+    public static final String FRONT_PRO_HTTPS = System.getenv("FRONT_PRO_HTTPS");
 
     // 경로 이름
     public static final String FILTER_PATH = "/filters";
