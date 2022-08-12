@@ -167,10 +167,15 @@ public class PortfolioService {
         if (tableCount == 0) {
             throw new PortfolioNotFoundException();
         }
+        if (tableCount == 1 && previousSeenIdx != -1){
+            throw new PortfolioNotFoundException();
+        }
         // 선택한 범위 데이터 가져오기
         // 모든 범위
-        if (Objects.equals(backendSwitch, ON) && Objects.equals(frontendSwitch, ON)) {
-            portfolioList = portfolioRepository.findAllNotPreviousSeenIdx(previousSeenIdx);
+        {
+            if (Objects.equals(backendSwitch, ON) && Objects.equals(frontendSwitch, ON)) {
+                portfolioList = portfolioRepository.findAllNotPreviousSeenIdx(previousSeenIdx);
+            }
         }
         // 백엔드 포트폴리오만
         if (Objects.equals(backendSwitch, ON) && Objects.equals(frontendSwitch, OFF)) {
