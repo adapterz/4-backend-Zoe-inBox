@@ -8,11 +8,14 @@ import org.springframework.stereotype.Component;
 final public class ConstantManager {
 
     // 프론트 서버
-    public static final String FRONT_URL = System.getenv("FRONT_URL");
+    public static final String FRONT_DEV = System.getenv("FRONT_DEV");
+    public static final String FRONT_PRO = System.getenv("FRONT_PRO");
+    public static final String FRONT_PRO_HTTPS = System.getenv("FRONT_PRO_HTTPS");
 
     // 경로 이름
     public static final String FILTER_PATH = "/filters";
     public static final String PORTFOLIO_PATH = "/portfolios";
+    public static final String COOKIE_PATH = "/cookies";
 
     // 응답 메세지
     public final String INVALID_REQUEST = "invalid_request";
@@ -24,6 +27,7 @@ final public class ConstantManager {
 
     public final String AUTHORIZED = "authorized";
     public final String NOT_EXIST = "not_exist";
+    public final String GET_COOKIE = "get_cookie";
 
     // 그 밖의 상수 값
     public final String FILTER = "filter";
@@ -31,6 +35,9 @@ final public class ConstantManager {
     public static final String OFF = "off";
     public static final String FE = "fe";
     public static final String BE = "be";
+    public final String PREVIOUS_SEEN_IDX = "previous_seen_idx";
+
+    // 유효한 영상 확장자
 
     public static final String MP4 = "mp4";
     public static final String AVI = "avi";

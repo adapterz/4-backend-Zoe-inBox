@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,15 +27,20 @@ public class Portfolio {
     private Long portfolio_idx;
     @Column(columnDefinition = "TINYINT")
     private Byte rangeVal;
-    @Column(columnDefinition = "CHAR(8)")
+
+    @NotNull
+    @Column(length = 20)
     private String title;
     @Column(columnDefinition = "DATE")
     private Date portfolio_date;
-    @Column(columnDefinition = "CHAR(12)")
+
+    @NotNull
+    @Column(length = 20)
     private String about;
     @OneToOne
     @JoinColumn(name = "file_idx")
     private PortfolioFile portfolioFile;
+    @NotNull
     @Column(nullable = false, length = 100)
     private String email;
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

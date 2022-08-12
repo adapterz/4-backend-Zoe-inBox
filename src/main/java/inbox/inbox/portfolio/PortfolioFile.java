@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +25,13 @@ public class PortfolioFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long file_idx;
+    @NotNull
     @Column(columnDefinition = "CHAR(64)")
     private String file_name;
+    @NotNull
     @Column(columnDefinition = "CHAR(4)")
     private String extension;
+
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     public Timestamp created_at;
 

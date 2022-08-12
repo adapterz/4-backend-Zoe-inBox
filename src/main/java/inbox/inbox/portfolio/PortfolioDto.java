@@ -1,6 +1,5 @@
 package inbox.inbox.portfolio;
 
-
 import static inbox.inbox.utils.ConstantManager.AVI;
 import static inbox.inbox.utils.ConstantManager.BE;
 import static inbox.inbox.utils.ConstantManager.FE;
@@ -9,6 +8,7 @@ import static inbox.inbox.utils.ConstantManager.MP4;
 import static inbox.inbox.utils.ConstantManager.WEBM;
 import static inbox.inbox.utils.ConstantManager.WMV;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import inbox.inbox.exception.ValidationGroup;
 import inbox.inbox.exception.ValidationGroup.PortfolioValidationGroup;
 import inbox.inbox.exception.ValuesAllowed;
@@ -24,7 +24,6 @@ import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 // Portfolio 테이블과 관련된 데이터 옮겨줄 객체의 클래스
 @Data
@@ -44,16 +43,16 @@ public class PortfolioDto {
     private String range;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
-    @Size(max = 8, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
+    @Size(max = 20, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "title")
     private String title;
 
     @NotNull(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
     @PastOrPresent(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
-    @DateTimeFormat(pattern = "yyyyMMdd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
     private Date date;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
-    @Size(max = 12, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
+    @Size(max = 20, groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
     private String about;
 
     @Min(value = 1, message = "confirmIdx", groups = {
@@ -78,6 +77,5 @@ public class PortfolioDto {
         this.confirmCode = confirmCode;
         this.email = email;
     }
-
 
 }
