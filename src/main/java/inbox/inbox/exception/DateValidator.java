@@ -7,6 +7,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.SneakyThrows;
 
+// 입력한 포트폴리오 날짜가 현재 혹은 과거인지 유효성 검사해주는 유효성 검사기
+// @PastOrPresent 어노테이션 사용 시 원하는 대로 유효성 검사를 해주지 않아서 직접 정의
 public class DateValidator implements ConstraintValidator<DateValidated, Date> {
 
     private String returnMessage;
@@ -32,18 +34,15 @@ public class DateValidator implements ConstraintValidator<DateValidated, Date> {
         return valid;
     }
 
-    // 유효성 검사
+    // 현재 혹은 과거인지 유효성 검사
     private boolean isDateValid(Date input) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date date = sdf.parse(sdf.format(input));
         Date now = sdf.parse(sdf.format(new Date()));
         if (!(date.equals(now) || date.before(now))) {
-            System.out.println("valid false ");
             return false;
 
         }
-        System.out.println("valid true ");
         return true;
     }
-
 }
