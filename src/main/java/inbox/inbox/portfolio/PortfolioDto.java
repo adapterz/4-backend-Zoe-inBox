@@ -9,6 +9,7 @@ import static inbox.inbox.utils.ConstantManager.WEBM;
 import static inbox.inbox.utils.ConstantManager.WMV;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import inbox.inbox.exception.DateValidated;
 import inbox.inbox.exception.ValidationGroup;
 import inbox.inbox.exception.ValidationGroup.PortfolioValidationGroup;
 import inbox.inbox.exception.ValuesAllowed;
@@ -18,7 +19,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Builder;
@@ -47,8 +47,8 @@ public class PortfolioDto {
     private String title;
 
     @NotNull(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
-    @PastOrPresent(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
+    @DateValidated(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "date")
     private Date date;
 
     @NotEmpty(groups = {ValidationGroup.PortfolioValidationGroup.class}, message = "about")
