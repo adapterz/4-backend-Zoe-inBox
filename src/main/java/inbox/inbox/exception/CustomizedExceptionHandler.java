@@ -39,7 +39,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("{} {} {} {}",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "RuntimeReception"),
-            keyValue("status_code", HttpStatus.INTERNAL_SERVER_ERROR.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.INTERNAL_SERVER_ERROR.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,7 +59,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} {}",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "ConstraintViolationException"),
-            keyValue("status_code", HttpStatus.BAD_REQUEST.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.BAD_REQUEST.toString().substring(0, 3)),
             keyValue("invalid_key", exceptionArray[1].substring(1)),
             keyValue("log_id", request.getAttribute("log_id")));
 
@@ -76,7 +76,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} ",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "PortfolioRangeConflictException"),
-            keyValue("status_code", HttpStatus.CONFLICT.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.CONFLICT.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.CONFLICT);
@@ -93,7 +93,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} ",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "PortfolioConfirmNotFoundException"),
-            keyValue("status_code", HttpStatus.NOT_FOUND.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.NOT_FOUND.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.NOT_FOUND);
@@ -110,7 +110,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} ",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "PortfolioConfirmUnauthorizedException"),
-            keyValue("status_code", HttpStatus.UNAUTHORIZED.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.UNAUTHORIZED.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.UNAUTHORIZED);
@@ -126,7 +126,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} ",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "PortfolioNotFoundException"),
-            keyValue("status_code", HttpStatus.OK.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.OK.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
         return new ResponseEntity<Object>(exceptionMessage, HttpStatus.OK);
@@ -149,7 +149,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "HttpMessageNotReadable"),
             keyValue("invalid_key", exceptionArray[arrayLen - 2]),
-            keyValue("status_code", HttpStatus.BAD_REQUEST.toString().substring(0, 3)));
+            keyValue("status", HttpStatus.BAD_REQUEST.toString().substring(0, 3)));
 
         return new ResponseEntity(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
