@@ -27,11 +27,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
         request.setAttribute("log_id", uuid);
 
         String queryString = request.getQueryString();
-        log.info("{} {} {} {}", keyValue("log_type", "Request"),
+        log.info("{} {} {} {} {}", keyValue("log_type", "Request"),
             keyValue("method", request.getMethod()),
             keyValue("uri", queryString == null ? request.getRequestURI()
                 : request.getRequestURI() + queryString), keyValue("log_id",
-                request.getAttribute("log_id")));
+                request.getAttribute("log_id")),
+            keyValue("user_agent", request.getHeader("User-Agent")));
         return true;
     }
 
@@ -41,14 +42,15 @@ public class LoggingInterceptor implements HandlerInterceptor {
         Object handler, @Nullable ModelAndView modelAndView) throws Exception {
         String queryString = request.getQueryString();
 
-        log.info("{} {} {} {} {}",
+        log.info("{} {} {} {} {} {}",
             keyValue("log_type", "Response"),
             keyValue("method", request.getMethod()),
             keyValue("uri", queryString == null ? request.getRequestURI()
                 : request.getRequestURI() + queryString),
             keyValue("status", response.getStatus()),
             keyValue("log_id",
-                request.getAttribute("log_id")));
+                request.getAttribute("log_id")),
+            keyValue("user_agent", request.getHeader("User-Agent")));
     }
 }
 
