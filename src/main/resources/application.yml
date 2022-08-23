@@ -1,13 +1,15 @@
 spring:
+  profiles:
+    active: prod
   mvc:
     dispatch-options-request: true
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: ${DB_URL}/in_box
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
   mail:
@@ -26,5 +28,6 @@ spring:
           timeout: 5000
           writetimeout: 5000
 logging:
+  config: classpath:logback-spring-${spring.profiles.active}.xml
   level:
-    org.springframework: DEBUG
+    root: info
