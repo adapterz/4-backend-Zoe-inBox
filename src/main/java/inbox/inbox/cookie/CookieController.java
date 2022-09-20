@@ -31,15 +31,4 @@ public class CookieController {
     public CookieResponseMessage getCookieForPreviousRequest() {
         return CookieResponseMessage.builder().message(constant.GET_COOKIE).build();
     }
-
-    // 페이지 불러올 때 쿠키 상황 초기화
-    // be, fe, filter 라는 이름을 가진 쿠키 모두 삭제
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(COOKIE_PATH)
-    public ResponseEntity<Object> resetCookie(HttpServletRequest request, HttpServletResponse response){
-        response.addHeader("Set-Cookie", cookieManager.deleteCookie(BE).toString());
-        response.addHeader("Set-Cookie", cookieManager.deleteCookie(FE).toString());
-        response.addHeader("Set-Cookie", cookieManager.deleteCookie(constant.FILTER).toString());
-        return ResponseEntity.noContent().build();
-    }
 }
