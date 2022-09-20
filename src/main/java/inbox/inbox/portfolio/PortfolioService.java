@@ -6,11 +6,15 @@ import static inbox.inbox.utils.ConstantManager.OFF;
 import static inbox.inbox.utils.ConstantManager.ON;
 
 import inbox.inbox.utils.UserInfoManager;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 // 포트폴리오 서비스
 @RequiredArgsConstructor
@@ -26,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PortfolioService {
 
     private final JavaMailSender javaMailSender;
+
+    private final SpringTemplateEngine templateEngine;
     private final PortfolioConfirmRepository portfolioConfirmRepository;
     private final PortfolioRepository portfolioRepository;
     private final PortfolioFileRepository portfolioFileRepository;
@@ -33,24 +41,37 @@ public class PortfolioService {
 
     // 인증 메일 보내기
     public void sendConfirmCodeForEmailAuthentication(
-        PortfolioConfirmDto portfolioConfirmDto) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        StringBuilder confirmText = new StringBuilder("인증번호: ");
+        PortfolioConfirmDto portfolioConfirmDto)
+        throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        /*
+        StringBuilder confirmText = new StringBuilder(
+            "안녕하세요. in-box 입니다.\n개발자 포트폴리오 업로드를 위한 인증번호 입니다.\n\n인증번호: ");
+
+         */
         // 6자리 난수 생성 100000~999999
         Random random = new Random(System.currentTimeMillis());
         int confirmCode = (random.nextInt(900000) + 100000) % 1000000;
 
         // 수신자
-        simpleMailMessage.setTo(portfolioConfirmDto.getEmail());
+        message.addRecipients(MimeMessage.RecipientType.TO, portfolioConfirmDto.getEmail());
         // 메일 제목
-        simpleMailMessage.setSubject("Inbox 포트폴리오 업로드를 위한 인증번호 메일입니다.");
-        simpleMailMessage.setText(String.valueOf(confirmText.append(confirmCode)));
+        message.setSubject("[in-box] 포트폴리오 업로드를 위한 인증번호 메일입니다.");
+        //message.setText(setContext(String.valueOf(confirmText.append(confirmCode))));
+        message.setText(setContext(String.valueOf(confirmCode)),"utf-8", "html");
+        message.setFrom(new InternetAddress("in-box@gmail.com", "in-box"));
+
         // 메일 발송
-        javaMailSender.send(simpleMailMessage);
+        javaMailSender.send(message);
         // dto 에 인증번호 정보 추가
         portfolioConfirmDto.setConfirmCode(confirmCode);
     }
-
+    // 인증 메일 관련 메서드
+    private String setContext(String code) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        return templateEngine.process("mail", context);
+    }
 
     // Confirm 테이블에 이메일 인증을 위한 정보 추가 (인증번호, 유저 ip, User-Agent, email)
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
@@ -167,7 +188,7 @@ public class PortfolioService {
         if (tableCount == 0) {
             throw new PortfolioNotFoundException();
         }
-        if (tableCount == 1 && previousSeenIdx != -1){
+        if (tableCount == 1 && previousSeenIdx != -1) {
             throw new PortfolioNotFoundException();
         }
         // 선택한 범위 데이터 가져오기

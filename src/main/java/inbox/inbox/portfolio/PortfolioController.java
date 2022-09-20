@@ -11,8 +11,10 @@ import inbox.inbox.exception.ValidationGroup.PortfolioValidationGroup;
 import inbox.inbox.utils.ConstantManager;
 import inbox.inbox.exception.ValuesAllowed;
 import inbox.inbox.utils.CookieManager;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 // 포트폴리오 컨트롤러
+
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -44,6 +47,7 @@ public class PortfolioController {
     // 포트폴리오 정보 업로드
     @Validated(PortfolioValidationGroup.class)
     @PostMapping(PORTFOLIO_PATH)
+
     public @ResponseBody ResponseEntity<Object> uploadPortfolio(
         @RequestBody @Valid PortfolioDto portfolioDto,
         HttpServletRequest request) throws NoSuchAlgorithmException {
@@ -68,6 +72,7 @@ public class PortfolioController {
     @GetMapping(PORTFOLIO_PATH + "/file")
     public PortfolioResponseMessage requestPortfolio(HttpServletRequest request,
         HttpServletResponse response) {
+
         // 유저가 원하는 포트폴리오의 range 체크
         Cookie[] cookies = cookieManager.getAllRequestCookie(request);
         String backendSwitch = ON;
@@ -118,6 +123,7 @@ public class PortfolioController {
     public ResponseEntity<Object> switchRange(
         @PathVariable("option") @ValuesAllowed(values = {FE, BE}) String option,
         HttpServletResponse response, HttpServletRequest request) {
+
         // 필요한 변수 정의
         Cookie[] cookies = cookieManager.getAllRequestCookie(request);
         boolean isOtherOff = false;
@@ -172,9 +178,10 @@ public class PortfolioController {
     @PostMapping(PORTFOLIO_PATH + "/email")
     public PortfolioResponseMessage confirmEmail(
         @RequestBody @Valid PortfolioConfirmDto portfolioConfirmDto,
-        HttpServletRequest request) throws NoSuchAlgorithmException {
-        // 인증 메일 보내기
+        HttpServletRequest request)
+        throws NoSuchAlgorithmException, MessagingException, UnsupportedEncodingException {
 
+        // 인증 메일 보내기
         service.sendConfirmCodeForEmailAuthentication(
             portfolioConfirmDto);
         // db에 (인증번호, 유저 ip, User-Agent, email) 저장

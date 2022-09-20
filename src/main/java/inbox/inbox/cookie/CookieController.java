@@ -1,10 +1,17 @@
 package inbox.inbox.cookie;
 
+import static inbox.inbox.utils.ConstantManager.BE;
 import static inbox.inbox.utils.ConstantManager.COOKIE_PATH;
+import static inbox.inbox.utils.ConstantManager.FE;
 
 import inbox.inbox.utils.ConstantManager;
+import inbox.inbox.utils.CookieManager;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CookieController {
 
     private final ConstantManager constant;
+    private final CookieManager cookieManager;
 
     // 백엔드 서버 브라우저의 쿠키 가져오기
     @ResponseStatus(HttpStatus.OK)

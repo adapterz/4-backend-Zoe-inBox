@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" , lang="ko">
+<head align="center" style="margin: 30%">
+  <title th:remove="all">인증번호 이메일</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body align="center" style="padding: 20px">
+<h3 style="background: #efefef; padding: 10px;">인증 번호</h3>
+<p> 안녕하세요. in-box 입니다.</p>
+<p> 개발자 포트폴리오 업로드를 위한 인증번호 입니다.</p>
+<span style="background: #efefef; padding: 10px;"
+      th:text="${code}"></span>
+</body>
+</html>

@@ -76,10 +76,10 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         log.info("{} {} {} {} ",
             keyValue("log_type", "Exception"),
             keyValue("exception_type", "PortfolioRangeConflictException"),
-            keyValue("status", HttpStatus.CONFLICT.toString().substring(0, 3)),
+            keyValue("status", HttpStatus.BAD_REQUEST.toString().substring(0, 3)),
             keyValue("log_id", request.getAttribute("log_id")));
 
-        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.CONFLICT);
+        return new ResponseEntity<Object>(exceptionMessage, HttpStatus.BAD_REQUEST);
     }
 
     // confirm 테이블에 일치하는 idx 정보가 없을 때

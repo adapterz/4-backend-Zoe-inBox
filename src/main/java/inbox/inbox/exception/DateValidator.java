@@ -34,14 +34,21 @@ public class DateValidator implements ConstraintValidator<DateValidated, Date> {
         return valid;
     }
 
-    // 현재 혹은 과거인지 유효성 검사
+    // 날짜 유효성 검사
+    // 현재 혹은 과거인지 & 2000년도 이후 날짜인지 유효성 검사
     private boolean isDateValid(Date input) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date date = sdf.parse(sdf.format(input));
+        Date inputDate = sdf.parse(sdf.format(input));
         Date now = sdf.parse(sdf.format(new Date()));
-        if (!(date.equals(now) || date.before(now))) {
+        Date twoThousandYear = sdf.parse("20000101");
+        // 현재 혹은 과거가 아닐 때
+        if (!(inputDate.equals(now) || inputDate.before(now))) {
             return false;
+        }
 
+        // 2000년도 이후 영상이 아닐 때
+        if (!(twoThousandYear.before(inputDate) || twoThousandYear.equals(inputDate))) {
+            return false;
         }
         return true;
     }
